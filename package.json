@@ -1,0 +1,22 @@
+{
+    "name": "",
+    "title": "",
+    "version": "1.0.0",
+    "homepage": "",
+    "author": "",
+    "devDependencies": {
+        "grunt": "",
+        "grunt-contrib-less": "",
+        "grunt-contrib-watch": "",
+        "grunt-banner": "",
+        "grunt-contrib-uglify": ""
+    },
+    "repository": {
+        "type": "",
+        "url": ""
+    },
+    "scripts": {
+        "preview": "",
+        "watch": ""
+    }
+}
