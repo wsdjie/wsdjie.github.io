@@ -6,7 +6,8 @@ date:       2019-08-08-01:17:00
 author:     ""
 header-img: "img/bg3.jpg"
 tags:
-    - 开发
+	- 开发
+	- 后端
 ---
 
 #### SpringBoot调用外部接口的一个简单实例
@@ -30,7 +31,7 @@ tags:
 <br>
 ### 第二步
 
-在service层创建service层中，建立HttpClient . java类
+在service层中，建立HttpClient类
 
 	import org.springframework.http.HttpMethod;
 	import org.springframework.http.ResponseEntity;
@@ -59,12 +60,12 @@ tags:
 		
 		@RequestMapping(value="/djieTest")
 		public String test() {
-			String url ="http://v.juhe.cn/toutiao/indexkey=XXXXXX"; //以聚合数据的新闻头条接口为例
+			String url ="http://v.juhe.cn/toutiao/index?key=XXXXX"; //以聚合数据的新闻头条接口为例
 			HttpMethod method = HttpMethod.GET;
 			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 			return httpClient.client(url, method, params);
 		}
-		
+
 <br>
 #### 调用成功
 <img src="/img/in-post/1565197781086.png">
