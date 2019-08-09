@@ -1,4 +1,16 @@
-# springBoot学习笔记（一）
+---
+layout:     post
+title:      "SpringBoot学习笔记（一）"
+subtitle:   ""
+date:       2019-08-10-02:00:00
+author:     "Djie"
+header-img: "img/bg3.jpg"
+tags:
+  - 后端
+  - 开发
+---
+
+> springBoot学习笔记（一）
 
 **Spring Boot的分层结构**
 
@@ -140,4 +152,3 @@ public class UserRepositoryTests {
 	}
 }
 ```
-
