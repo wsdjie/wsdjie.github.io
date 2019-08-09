@@ -19,17 +19,15 @@ tags:
 
 **JUnit**：
 
-<br> JUnit是一个Java语言的单元测试框架。它由Kent Beck和Erich Gamma建立，逐渐成为源于Kent Beck的
-<br>sUnit的xUnit家族中最为成功的一个。 JUnit有它自己的JUnit扩展生态圈。多数Java的开发环境都已经集成了
-<br>JUnit作为单元测试的工具。 
+JUnit是一个Java语言的单元测试框架。它由Kent Beck和Erich Gamma建立，逐渐成为源于KentBeck的sUnit的xUnit家族中最为成功的一个。 JUnit有它自己的JUnit扩展生态圈。多数Java的开发环境都已经集成了JUnit作为单元测试的工具。 
 <br>[学习地址](https://www.w3cschool.cn/junit/) 
 
 #### Spring Data JPA
 
-<br>JPA全称Java Persistence API，是一组用于将数据存入数据库的类和方法的集合。JPA通过JDK 5.0注解或
-<br>XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。 
-<br>JPA是开源API，各企业经营商Oracle, Redhat, Eclipse等，提供各种有特色的JPA产品，其中包括: Hiberate, 
-<br>Eclipselink, Toplink, Spring Data JPA等等。 
+JPA全称Java Persistence API，是一组用于将数据存入数据库的类和方法的集合。JPA通过JDK 5.0注解或
+XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。 
+JPA是开源API，各企业经营商Oracle, Redhat, Eclipse等，提供各种有特色的JPA产品，其中包括: Hiberate, 
+Eclipselink, Toplink, Spring Data JPA等等。 
 <br>[参考地址](https://docs.spring.io/spring-data/jpa/docs/2.1.0.M3/reference/html/ )
 
 **在SpringBoot中使用JPA 操作MySQL数据库**
