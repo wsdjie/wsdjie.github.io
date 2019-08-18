@@ -14,7 +14,7 @@ tags:
 
 **Spring Boot的分层结构**
 
-<br>Keynote: MVC模型；三层架构； 
+Keynote: MVC模型；三层架构； 
 <br>Controller对应控制层、Service业务层、Repository数据层、model模型层 
 
 **JUnit**：
