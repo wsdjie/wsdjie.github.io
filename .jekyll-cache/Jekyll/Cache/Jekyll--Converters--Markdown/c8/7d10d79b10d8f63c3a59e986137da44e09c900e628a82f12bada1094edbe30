@@ -1,0 +1,267 @@
+I"g.<blockquote>
+  <p>JAVA学习总结（一）</p>
+</blockquote>
+
+<h3 id="java语言简介">JAVA语言简介</h3>
+<h4 id="java是什么">JAVA是什么</h4>
+<p><br />–&gt;通俗意义上指java编程语言
+<br />–&gt;实指java语言与java平台</p>
+
+<h4 id="java的产生">java的产生</h4>
+<p><br />–&gt;1991年，sun公司基于C++开发了Oak语言，亦是java的前身，目的为家电嵌入式应用
+​<br />–&gt;1995年，为顺应互联网发展，java应运而生。
+​<br />–&gt;1996年1月，JDK1.0发布，标志java成为一种独立的开发工具。
+​<br />–&gt;1998年-1999年，java2平台相继发布，包括J2EE,J2SE,J2ME
+​<br />	java体系结构：
+​<br />	–&gt;J2EE（javaEE）：多用于企业级网络应用开发。
+​<br />	–&gt;J2SE（javaSE）：多用于桌面编程。
+​<br />	–&gt;J2ME（javaMe）：多用于嵌入式开发。
+​<br />–&gt;2006年，java开源。
+​<br />–&gt;2009年，Oracle收购Sun</p>
+
+<h4 id="如何和运行java程序">如何和运行java程序？</h4>
+<p>​	<br />–&gt;搭建java环境
+​	<br />搭建前需要了解的概念：
+​	<br />–&gt;JDK：java开发环境包，包含了java运行环境（JVM），常用java工具（编译器、解释器等），基础类库.
+​	<br />–&gt;JRE：java运行环境包，包含了jvm的核心类库等。
+​	<br />–&gt;JVM：java虚拟机，java移植性的重要保证。
+​	<br />下载JDK：
+​	<br />–&gt;官网：https://www.java.com/zh_CN/
+​	<br />–&gt;百度搜索下载
+​	<br />安装：
+​	<br />//略
+​	<br />	注：安装后会在路径下出现两个文件夹（jdk和jre）
+​	<br />配置：
+​	<br />–&gt;右击计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;添加/编辑
+​	<br />–&gt;JAVA_HOME:jdk安装路径（可不写，须在Path或classPath中填写完整路径）
+​	<br />–&gt;Path：”%JAVA_HOME%\bin;”或”jdk安装路径\bin;”
+​	<br />–&gt;ClassPath:”.;%JAVA_HOME%\lib”或”jdk安装路径\lib”
+​	<br />	注：1.6及以后版本可不用配置ClassPath</p>
+
+<h3 id="继承与多态">继承与多态</h3>
+<h4 id="继承">继承</h4>
+<p>​	<br />–&gt;子类集成父类
+​	<br />–&gt;拥有部分父类属性和方法（非private）
+​	<br />–&gt;子类可拥有并非来自于父类的属性和方法</p>
+
+<h4 id="子类">子类</h4>
+<p><br />–&gt;对父类的衍生和扩展
+​<br />–&gt;语法：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class 子类名 extends 父类名
+		{
+			属性；
+			行为：
+			/*
+				它只继承了父类中 非私有属性和方法。
+			*/
+		}
+</code></pre></div></div>
+
+<h4 id="父类超类">父类（超类）</h4>
+<p>​		<br />–&gt;特点规则：
+​		<br />–&gt;在java中，只支持单继承，不支持多重继承即一个子类只能有一个父类。</p>
+<h4 id="子类对象的产生过程">子类对象的产生过程</h4>
+<p>​	<br />–&gt;子类对象的产生一定先去创建父类的对象（先去执行父类的构造方法）
+​	<br />–&gt;super的用法：
+​	<br />	–&gt;在子类构造方法第一行，默认调用父类中无参数构造方法</p>
+<h4 id="重写父类方法override">重写父类方法：override</h4>
+<p><br />–&gt;在子类中，如果出现了与父类中完全相同的方法（修饰符可以不同，但是子类的方法访问级别大于等于父类的修饰权限），就是方法的重写
+<br />	注：调用的始终都是重写之后的方法。</p>
+
+<h4 id="访问级别">访问级别</h4>
+<p><br />public所有&gt;protected同包或父子关系&gt;default(friendly)同包&gt;private本类</p>
+<h4 id="super">super</h4>
+<p><br />	–&gt;在子类中如何调用重写之前的方法
+<br />	–&gt;在子类的构造方法中，第一行使用，默认调用父类无参数构造方法，也可以调用有参数的
+<br />	–&gt;在子类中，使用super相当于父类的对象，可以调用父类中的所有非私有属性和方法。</p>
+
+<h4 id="this">this</h4>
+<p><br />	–&gt;在当前类中使用，相当于是当前类的对象
+<br />	–&gt;在当前类中，可以调用当前类的构造方法。</p>
+<h4 id="抽象类">抽象类</h4>
+<p><br />	–&gt;对象是通过类进行描述的。 当一个类的信息不足以描述一个对象的时候，这个类就是抽象类。
+<br />	–&gt;在程序中使用abstract关键字修饰的类
+<br />	–&gt;语法：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>abstract class 类名
+			abstract class 类名
+			{
+				属性；
+				方法；
+			}
+</code></pre></div></div>
+<p><br />–&gt;抽象方法
+<br />		–&gt;只有方法的声明，没有方法体
+<br />			–&gt;语法1：
+<br />				 abstract 修饰符 返回值 方法名（参数列表）；
+<br />			–&gt;语法2：
+<br />				修饰符 abstract 返回值 方法名（参数列表）；
+<br />		注意：
+<br />			1 在抽象类中，可以有抽象方法。也可以没有
+<br />			2 如果一个类中出现了抽象方法，那么这个类一定是抽象类。
+<br />			3 抽象类不能直接创建对象，只能使用子类进行创建
+<br />			4 子类继承了抽象类，那么必须重写父类中的所有抽象方法。除非子类本身也是抽象类。</p>
+<h4 id="接口">接口</h4>
+<p><br />–&gt;提供一种标准和规范。供使用者调用。
+<br />	–&gt;在程序中，使用关键字 interface修饰的 就是接口，接口就是抽象方法和常量的集合。
+<br />	–&gt;语法：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>修饰符 interface 接口名
+	修饰符 interface 接口名
+		{
+			抽象方法；
+			常量（少用）
+		}
+</code></pre></div></div>
+<p><br />–&gt;注意：接口与类的级别是相同的。
+<br />	–&gt;接口的规则：
+<br />		–&gt;接口可以实现多重继承
+<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface 接口1 extends 接口2，接口3，接口4
+			{
+			}
+</code></pre></div></div>
+<p><br />–&gt;接口的使用，只能通过类进行实现，语法格式：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class 类名 implements 接口1，接口2，接口3、、、
+			class 类名 implements 接口1，接口2，接口3、、、
+			{
+				// 类实现了接口，必须重写该接口中的所有抽象方法，除非当前类也是抽象类。	
+			}
+</code></pre></div></div>
+<h4 id="static">static</h4>
+<p><br />–&gt;静态的
+<br />	–&gt;可以修饰变量和方法，修饰变量叫做 静态变量，修饰方法，静态方法。
+<br />	–&gt;没有被static修饰的方法和变量，叫做实例变量和实例方法
+<br />	注：
+<br />		1、被static修饰的变量和方法，属于类的，在内存中只分配一块存储空间，所有对象都共享此空间。
+<br />		所以被static修饰的方法和变量可以直接使用类名调用。
+<br />		2、在静态方法中，只能使用静态变量和调用静态方法。
+<br />		3、在静态方法中，不能使用this关键字
+<br />	–&gt;静态语句块:当类被加载时就会执行的语句块</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		static
+		{
+			链接数据库，连接池，原理基本用此方式
+		}
+</code></pre></div></div>
+
+<h4 id="final">final</h4>
+<p>​	<br />–&gt;最终的
+​	<br />–&gt;可以修饰类，方法，变量
+​	<br />–&gt;修饰变量，那么就是常量final float PI=3.14f;
+​	<br />–&gt;修饰类，那么该类就是最终类不能被继承
+​	<br />–&gt;修饰方法，那么该方法不能被重写。</p>
+
+<h3 id="java基础类的应用">Java基础类的应用</h3>
+
+<h4 id="java中常用基础包">java中常用基础包</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>包名</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>java.applet</td>
+      <td>提供创建applet小程序所需要的类</td>
+    </tr>
+    <tr>
+      <td>java.lang</td>
+      <td>提供Java语言程序设计的基础类</td>
+    </tr>
+    <tr>
+      <td>java.io</td>
+      <td>提供输入和输出相关的类</td>
+    </tr>
+    <tr>
+      <td>java.util</td>
+      <td>提供处理日期，时间，随机数生成等各种实用工具的类</td>
+    </tr>
+    <tr>
+      <td>java.net</td>
+      <td>提供应用于网络程序的类</td>
+    </tr>
+    <tr>
+      <td>java.text</td>
+      <td>提供处理文本，日期，数值和消息的类和接口</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="包装类多用于类型转换">包装类（多用于类型转换）</h3>
+
+<p>​	<br />–&gt;将简单的类型使用类表示，可调用包装类中提供的各种方法。
+​	<br />–&gt;各简单类型的包装类：P142（首字母大写）（int为integer）
+​	<br />–&gt;基本数据类型与对应包装类类型一筒：
+​	<br />	1、基本数据类型直接声明，包装类需要通过关键词NEW
+​	<br />	2、基本数据类型直接存储在栈空间中，包装类存储在堆空间中，在栈中被引用。
+​	<br />	3、默认值不同，包装类类型默认值为NULL
+​	<br />–&gt;类型转换
+​	<br />	转换为基本数据类型：对应包装类.parse对应基本类型（要转换的值）
+​	<br />	转换为包装类类型：对应包装类.valueOf（要转换的值）</p>
+
+<h4 id="object类">Object类</h4>
+<p><br />–&gt;所有类的父类
+​	<br />–&gt;常用方法
+​	<br />	–&gt;clone():克隆（复制）对象
+​	<br />	–&gt;equals()：比较两个对象是否相等(String)
+​	<br />	–&gt;finalize()：java垃圾回收时会调用的方法
+​	<br />	–&gt;getClass()：返回Object的运行时类
+​	<br />	–&gt;hashCode：返回哈希码
+​	<br />	–&gt;toString()：对象的字符串表示</p>
+
+<h4 id="与equals">==与equals</h4>
+<p>​	<br />–&gt;==：比较数值是否相等，或对象的引用是否相同。
+​	<br />–&gt;equals:比较字符串是否相同，或对象的引用是否相同。</p>
+
+<h4 id="字符串类常用方法">字符串类常用方法</h4>
+<p><br />–&gt;indexOf(),split(),subString()……了解常用的String，StringBuffer，Date，SimpleDateFormat，Calendar，了解 System，Math，RunTime，Random（随机数）</p>
+
+<h4 id="stringbuffer与stringbuilder">StringBuffer与StringBuilder</h4>
+
+<p>​	<br />–&gt;StringBuffer:多用于处理可变字符串，优点：效率更高
+​		–&gt;例：stringBuffer.append();
+​	<br />–&gt;String和StringBuffer的区别：
+​		<br />–&gt;String类声明的字符串长度固定，不可再改变，并且可以使用 “+” 连接符，
+​		<br />–&gt;StringBuffer类，长度可以改变。不能使用 “+”
+​	<br />–&gt;StringBuilder：非线程安全，效率更高，其他与StringBuffer类似</p>
+
+<h4 id="math类">Math类</h4>
+
+<p>–&gt;数学运算的大量静态方法：abs，pow，rendom(0.0到1.0之间的随机数)……</p>
+
+<h4 id="date类">Date类</h4>
+
+<p>–&gt;日期类：获取当前的系统时间。</p>
+
+<h4 id="simpledateformat">SimpleDateFormat</h4>
+
+<p>–&gt;格式化事件日期类</p>
+
+<h4 id="calendar">Calendar</h4>
+
+<p>​	<br />–&gt;日期类
+​	<br />–&gt;灵活的类，制作日历，使用此中</p>
+
+<h4 id="random">Random</h4>
+
+<p>–&gt;随机数类</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import java.util.Random; //导入Random类
+public class RandomTest {
+public static void main(String[] atgs) {
+//声明Random对象
+Random rd = new Random();
+//只显示大于0.5的数字
+for(int i=0;i&lt;10;i++){
+double wsdjie = rd.nextDouble();
+if(wsdjie&gt;0.5){
+System.out.println(wsdjie);
+}
+}
+}
+}
+</code></pre></div></div>
+
+:ET

@@ -1,0 +1,61 @@
+I"^<h3 id="springboot调用外部接口的一个简单实例">SpringBoot调用外部接口的一个简单实例</h3>
+
+<h3 id="第一步">第一步</h3>
+
+<p>在pom.xml文件中加入相应的配置</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		&lt;dependency&gt;
+            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+​		&lt;dependency&gt;
+​            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+​            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+​        &lt;/dependency&gt;
+</code></pre></div></div>
+
+<p><br /></p>
+<h3 id="第二步">第二步</h3>
+
+<p>在service层中，建立HttpClient类</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class HttpClient {
+
+	public String client(String url,HttpMethod method,MultiValueMap&lt;String, String&gt; params) {
+		RestTemplate template =new RestTemplate();
+		ResponseEntity&lt;String&gt; response1 = template.getForEntity(url, String.class);
+		System.out.println(response1.getBody());
+		return response1.getBody();
+	}
+	}
+</code></pre></div></div>
+
+<p><br /></p>
+<h3 id="第三步">第三步</h3>
+
+<p>编写controller层</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Autowired
+	HttpClient httpClient;
+	
+	@RequestMapping(value="/djieTest")
+	public String test() {
+		String url ="http://v.juhe.cn/toutiao/index?key=XXXXX"; //以聚合数据的新闻头条接口为例
+		HttpMethod method = HttpMethod.GET;
+		MultiValueMap&lt;String, String&gt; params = new LinkedMultiValueMap&lt;&gt;();
+		return httpClient.client(url, method, params);
+	}
+</code></pre></div></div>
+
+<p><br /></p>
+<h4 id="调用成功">调用成功</h4>
+<p><img src="/img/in-post/1565197781086.png" /></p>
+:ET
