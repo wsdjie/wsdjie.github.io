@@ -1,0 +1,222 @@
+I"�2<h2 id="java过滤器">JAVA过滤器</h2>
+
+<h3 id="过滤器应用场景">过滤器应用场景</h3>
+
+<p>Web资源权限访问控制</p>
+
+<p>请求字符集编码处理</p>
+
+<p>内容敏感字符词汇过滤</p>
+
+<p>响应信息压缩</p>
+
+<h3 id="过滤器工作流程">过滤器工作流程</h3>
+
+<p><img src="/img/in-post/1603857853322.png" /></p>
+
+<h3 id="过滤器的生命周期">过滤器的生命周期</h3>
+
+<p>web应用程序<strong>启动</strong>时，web服务器<strong>创建</strong>filter的实例对象，以及对象的<strong>初始化</strong>。</p>
+
+<p>当请求访问与过滤器<strong>关联</strong>的Web资源时，过滤器<strong>拦截请求</strong>，<strong>完成指定功能</strong></p>
+
+<p>Filter对象创建后会<strong>驻留在内存</strong>，在web应用移除或服务器<strong>停止</strong>时才<strong>销毁</strong></p>
+
+<p>过滤器的创建和销毁由<strong>web服务器负责</strong></p>
+
+<h3 id="过滤器的实现步骤">过滤器的实现步骤</h3>
+
+<p>1、编写java类实现Filter接口，并实现其doFilter方法</p>
+
+<p>2、在web.xml文件中对filter类进行注册，并设置所拦截的资源</p>
+
+<h4 id="过滤器链">过滤器链</h4>
+
+<p>在一个web应用中，多个过滤器组合起来称为一个过滤器链</p>
+
+<p>过滤器的调用顺序取决于过滤器在web.xml文件中的注册顺序</p>
+
+<h3 id="举个栗子">举个栗子</h3>
+
+<p><strong>例</strong></p>
+
+<p>java页面:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">test</span> <span class="kd">implements</span> <span class="nc">Filter</span><span class="o">{</span>
+
+	<span class="cm">/**
+	 * 销毁方法，做清理操作
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拦截器销毁"</span><span class="o">);</span>
+		
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 *  主要方法，完成过滤器功能
+	 *  FilterChain 过滤器链对象
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="nc">ServletRequest</span> <span class="n">requert</span><span class="o">,</span> <span class="nc">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">chain</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拦截处理"</span><span class="o">);</span>
+		<span class="c1">//方法内获取初始化蚕食</span>
+		<span class="nc">String</span> <span class="n">systemName</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"systemName"</span><span class="o">);</span> 
+		<span class="c1">//拦截完成后通知WEB服务器已完成，进行下一步操作或执行过滤器链的下一个过滤器若没有则执行请求，对请求资源进行处理</span>
+		<span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">requert</span><span class="o">,</span><span class="n">response</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="cm">/**
+	 * 初始化方法
+	 */</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="nc">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">ServletException</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拦截器初始化"</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">;</span><span class="c1">//获取初始化参数</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="nc">FilterConfig</span> <span class="n">config</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>web.xml页面</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="nt">&lt;filter&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>characterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span><span class="c">&lt;!-- 名称 --&gt;</span>
+		<span class="nt">&lt;filter-class&gt;</span>test<span class="nt">&lt;/filter-class&gt;</span><span class="c">&lt;!-- 所在类 --&gt;</span>
+
+		<span class="nt">&lt;init-param&gt;</span><span class="c">&lt;!-- 初始化参数 --&gt;</span>
+			<span class="nt">&lt;param-name&gt;</span>systemName<span class="nt">&lt;/param-name&gt;</span>
+			<span class="nt">&lt;param-value&gt;</span>key<span class="nt">&lt;/param-value&gt;</span>
+		<span class="nt">&lt;/init-param&gt;</span>
+	<span class="nt">&lt;/filter&gt;</span>
+
+
+	<span class="nt">&lt;filter-mapping&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>characterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span><span class="c">&lt;!-- 映射的过滤器 --&gt;</span>
+		<span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span><span class="c">&lt;!-- 对所有的请求都做拦截处理 --&gt;</span>
+	<span class="nt">&lt;/filter-mapping&gt;</span>
+</code></pre></div></div>
+
+<p>例2：解决中文乱码问题</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CharacterEncodingFilter</span> <span class="kd">implements</span> <span class="nc">Filter</span> <span class="o">{</span>
+
+	<span class="kd">private</span> <span class="nc">FilterConfig</span> <span class="n">config</span><span class="o">;</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
+
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="nc">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="nc">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">chain</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+
+		<span class="n">request</span><span class="o">.</span><span class="na">setCharacterEncoding</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"charset"</span><span class="o">));</span><span class="c1">// 根据过滤器配置字符集，设置请求字符集编码</span>
+
+		<span class="c1">// System.out.println("characterEncodingFilter 请求预处理");//测试过滤器（链）工作流程使用</span>
+		<span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+		<span class="c1">// System.out.println("characterEncodingFilter 响应后处理");//测试过滤器（链）工作流程使用</span>
+
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="nc">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">ServletException</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">;</span>
+
+	<span class="o">}</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<p>xml</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 字符集编码过滤器配置 --&gt;</span>
+	<span class="nt">&lt;filter&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>characterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span><span class="c">&lt;!-- 名称 --&gt;</span>
+		<span class="nt">&lt;filter-class&gt;</span>filter.CharacterEncodingFilter<span class="nt">&lt;/filter-class&gt;</span><span class="c">&lt;!-- 所在类 --&gt;</span>
+
+		<span class="nt">&lt;init-param&gt;</span><span class="c">&lt;!-- 初始化参数 --&gt;</span>
+			<span class="nt">&lt;param-name&gt;</span>charset<span class="nt">&lt;/param-name&gt;</span>
+			<span class="nt">&lt;param-value&gt;</span>UTF-8<span class="nt">&lt;/param-value&gt;</span>
+		<span class="nt">&lt;/init-param&gt;</span>
+	<span class="nt">&lt;/filter&gt;</span>
+
+
+	<span class="nt">&lt;filter-mapping&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>characterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span><span class="c">&lt;!-- 映射的过滤器 --&gt;</span>
+		<span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span><span class="c">&lt;!-- 对所有的请求都做拦截处理 --&gt;</span>
+
+	<span class="nt">&lt;/filter-mapping&gt;</span>
+</code></pre></div></div>
+
+<p>例3 登录安全控制过滤器</p>
+
+<p>java:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class SessionFilter implements Filter {
+
+	@Override
+	public void destroy() {
+
+	}
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+
+		HttpServletRequest hrequest = (HttpServletRequest) request;// 涉及到HTTP请求处理，转型处理
+		HttpServletResponse hresponse = (HttpServletResponse) response;// 涉及到HTTP请求处理，转型处理
+
+		String loginUser = (String) hrequest.getSession().getAttribute("loginUser");// 判断用户是否完成了登录操作，session中是否存储用户名
+
+		if (loginUser == null) {
+			hresponse.sendRedirect(hrequest.getContextPath() + "/index.jsp?flag=1");// 未登录，系统强制重定向至登录页面
+			return;
+		} else {
+			chain.doFilter(hrequest, hresponse);
+			return;
+		}
+
+	}
+
+	@Override
+	public void init(FilterConfig config) throws ServletException {
+
+	}
+
+}
+</code></pre></div></div>
+
+<p>xml:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 用户登录安全控制过滤器配置 --&gt;</span>
+	<span class="nt">&lt;filter&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>sessionFilter<span class="nt">&lt;/filter-name&gt;</span>
+		<span class="nt">&lt;filter-class&gt;</span>filter.SessionFilter<span class="nt">&lt;/filter-class&gt;</span>
+	<span class="nt">&lt;/filter&gt;</span>
+
+	<span class="nt">&lt;filter-mapping&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>sessionFilter<span class="nt">&lt;/filter-name&gt;</span>
+		<span class="nt">&lt;url-pattern&gt;</span>/message.jsp<span class="nt">&lt;/url-pattern&gt;</span><span class="c">&lt;!-- 对访问该页面的请求进行过滤 --&gt;</span>
+        <span class="nt">&lt;dispatcher&gt;</span>REQUEST<span class="nt">&lt;/dispatcher&gt;</span>
+         <span class="nt">&lt;dispatcher&gt;</span>ERROR<span class="nt">&lt;/dispatcher&gt;</span>
+	<span class="nt">&lt;/filter-mapping&gt;</span>
+</code></pre></div></div>
+
+<h3 id="过滤器配置">过滤器配置</h3>
+
+<p>filter-mapping子元素dispatcher</p>
+
+<p>REQUEST–直接访问页面（默认）</p>
+
+<p>INCLUDE–通过include访问另外的页面</p>
+
+<p>FORWARD–通过forward访问</p>
+
+<p>ERROR–异常处理机制调用时</p>
+:ET

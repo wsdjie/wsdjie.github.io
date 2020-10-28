@@ -1,0 +1,230 @@
+I"�[<blockquote>
+  <p>node.js学习笔记</p>
+</blockquote>
+
+<h3 id="作用">作用</h3>
+
+<p>1、写webAPI</p>
+
+<p>2、中间层</p>
+
+<p>3、前端工程化的一些工具（webpack,gulp）</p>
+
+<h3 id="优势">优势</h3>
+
+<p>1、性能高</p>
+
+<p>2、便于前端入手</p>
+
+<h2 id="全局模块">全局模块</h2>
+
+<p><strong>特点：</strong>何时何地都能访问，不需要引用</p>
+
+<p>process.env：返回计算机的环境变量</p>
+
+<p>Process.argv：获取各个参数，返回数组</p>
+
+<h2 id="系统模块">系统模块</h2>
+
+<p>node 系统模块：node自带的模块，不需要单独下载，但是在使用时，需要require()导入，而全局模块不用require ，直接使用</p>
+
+<p>如：path 用于处理文件路径和目录路径的模块</p>
+
+<p>fs 文件读写模块</p>
+
+<h2 id="自定义模块">自定义模块</h2>
+
+<h3 id="exports">exports</h3>
+
+<p>exports.a	单独导出a</p>
+
+<p>module.exports= 批量导出</p>
+
+<h3 id="require导入">require导入</h3>
+
+<p>1.如果有路径，就去路径里面找</p>
+
+<p>2.如果没有就去node_modules里面找</p>
+
+<p>3.再去node的安装目录里面找</p>
+
+<h2 id="http模块">HTTP模块</h2>
+
+<p>服务器对象http.createServer()</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">)</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">连接</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="dl">'</span><span class="s1">index</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">)</span>
+
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./</span><span class="p">${</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span><span class="s2">`</span><span class="p">,(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="dl">'</span><span class="s1">404 not fonund</span><span class="dl">'</span><span class="p">)</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="get">GET</h3>
+
+<p>数据放在url里传输</p>
+
+<p>容量&lt;32k</p>
+
+<pre><code class="language-javaScript">let http = require('http')
+let url = require('url')
+http.createServer((req,res) =&gt; {
+  let {pathname,query} = url.parse(req.url,true)//加上true后自动转为JSON格式
+      console.log(pathname,query);
+      res.end(query.name)
+  }).listen(8888)
+</code></pre>
+
+<h3 id="post">POST</h3>
+
+<p>数据放在body里分段传输</p>
+
+<p>容量&lt;2G</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">querystring</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">querystring</span><span class="dl">'</span><span class="p">)</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">data</span><span class="dl">'</span><span class="p">,</span><span class="nx">buffer</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
+  <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>   <span class="c1">//接收每段的数据</span>
+<span class="p">})</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="p">,()</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span><span class="c1">//将分段数据拼接起来成一段完整的数据</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">querystring</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span><span class="c1">//转为JSON格式</span>
+<span class="p">})</span> 
+<span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="登录api简易例子">登录API简易例子</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">)</span>    <span class="c1">//导入http模块</span>
+<span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">url</span><span class="dl">'</span><span class="p">)</span>  <span class="c1">//导入url模块进行get请求的解析</span>
+<span class="kd">const</span> <span class="nx">querystring</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">querystring</span><span class="dl">'</span><span class="p">)</span> <span class="c1">//导入querystring进行post请求的解析</span>
+<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nx">user</span><span class="o">=</span><span class="p">{</span>
+    <span class="na">admin</span><span class="p">:</span><span class="mi">123456</span>    <span class="c1">//模拟一个用户</span>
+<span class="p">}</span>
+
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">path</span><span class="p">,</span><span class="kd">get</span><span class="p">,</span><span class="nx">post</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="o">==</span><span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">){</span>  <span class="c1">//如果是get请求</span>
+        <span class="kd">let</span><span class="p">{</span><span class="nx">pathname</span><span class="p">,</span><span class="nx">query</span><span class="p">}</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span>
+        <span class="nx">path</span> <span class="o">=</span>  <span class="nx">pathname</span><span class="p">,</span>
+        <span class="kd">get</span> <span class="o">=</span> <span class="nx">query</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">get</span><span class="dl">"</span><span class="p">)</span>
+        <span class="nx">complete</span><span class="p">()</span>
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="o">==</span><span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">post</span><span class="dl">"</span><span class="p">)</span>
+        <span class="kd">let</span> <span class="nx">arr</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="nx">path</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">url</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">data</span><span class="dl">'</span><span class="p">,</span><span class="nx">buffer</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="p">,()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="nx">post</span> <span class="o">=</span>  <span class="nx">querystring</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">arr</span><span class="p">).</span><span class="nx">toString</span><span class="p">())</span>
+        <span class="nx">complete</span><span class="p">()</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">complete</span><span class="p">(){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">path</span><span class="o">==</span><span class="dl">'</span><span class="s1">/login</span><span class="dl">'</span><span class="p">){</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,{</span>
+                <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">text/plain;charset=utf-8</span><span class="dl">"</span>
+            <span class="p">})</span>
+            <span class="kd">let</span><span class="p">{</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">}</span><span class="o">=</span><span class="kd">get</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">[</span><span class="nx">username</span><span class="p">]){</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                    <span class="na">err</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="na">msg</span><span class="p">:</span><span class="dl">"</span><span class="s2">用户名不存在</span><span class="dl">"</span>
+                <span class="p">}))</span>
+            <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">[</span><span class="nx">username</span><span class="p">]</span><span class="o">!=</span><span class="nx">password</span><span class="p">){</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                    <span class="na">err</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="na">msg</span><span class="p">:</span><span class="dl">"</span><span class="s2">密码错误</span><span class="dl">"</span>
+                <span class="p">}))</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                    <span class="na">err</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="na">msg</span><span class="p">:</span><span class="dl">"</span><span class="s2">登录成功</span><span class="dl">"</span>
+                <span class="p">}))</span>
+            <span class="p">}</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">path</span><span class="o">==</span><span class="dl">'</span><span class="s1">/reg</span><span class="dl">'</span><span class="p">){</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,{</span>
+                <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">text/plain;charset=utf-8</span><span class="dl">"</span>
+            <span class="p">})</span>
+            <span class="kd">let</span><span class="p">{</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">}</span><span class="o">=</span><span class="nx">post</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">[</span><span class="nx">username</span><span class="p">]){</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                    <span class="na">err</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="na">msg</span><span class="p">:</span><span class="dl">"</span><span class="s2">账户已存在</span><span class="dl">"</span>       
+                <span class="p">})</span>
+                <span class="p">)</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                    <span class="na">err</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="na">msg</span><span class="p">:</span><span class="dl">"</span><span class="s2">注册成功</span><span class="dl">"</span>       
+                <span class="p">})</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`www</span><span class="p">${</span><span class="nx">path</span><span class="p">}</span><span class="s2">`</span><span class="p">,(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="dl">'</span><span class="s1">404</span><span class="dl">'</span><span class="p">)</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">)</span><span class="c1">//监听8080端口</span>
+</code></pre></div></div>
+
+<h3 id="包运行器npx">包运行器npx</h3>
+
+<p><strong>特性一：</strong>运行 <code class="highlighter-rouge">npx commandname</code> 会自动地在项目的 <code class="highlighter-rouge">node_modules</code> 文件夹中找到命令的正确引用，而无需知道确切的路径，也不需要在全局和用户路径中安装软件包。</p>
+
+<p><strong>特性二：</strong>无需先安装命令即可运行命令。</p>
+
+<h2 id="promise">Promise</h2>
+
+<p>Promise 是一种处理异步代码的方式。</p>
+
+<p>当 promise 被调用后，它会以<strong>处理中状态</strong>开始。 这意味着调用的函数会继续执行，而 promise 仍处于处理中直到解决为止，从而为调用的函数提供所请求的任何数据。</p>
+
+<p>被创建的 promise 最终会以<strong>被解决状态</strong>或<strong>被拒绝状态</strong>结束，并在完成时调用相应的回调函数（传给 <code class="highlighter-rouge">then</code> 和 <code class="highlighter-rouge">catch</code>）。</p>
+
+<h3 id="创建-promise">创建 promise</h3>
+
+<p>可以使用 <code class="highlighter-rouge">new Promise()</code> 对其进行初始化</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">done</span> <span class="o">=</span> <span class="kc">true</span>
+
+<span class="kd">const</span> <span class="nx">isItDoneYet</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">workDone</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">这是创建的东西</span><span class="dl">'</span>
+    <span class="nx">resolve</span><span class="p">(</span><span class="nx">workDone</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">why</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">仍然在处理其他事情</span><span class="dl">'</span>
+    <span class="nx">reject</span><span class="p">(</span><span class="nx">why</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div></div>
+:ET
