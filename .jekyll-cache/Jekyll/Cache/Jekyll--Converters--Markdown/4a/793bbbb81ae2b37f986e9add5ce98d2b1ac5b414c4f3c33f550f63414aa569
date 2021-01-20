@@ -1,0 +1,380 @@
+I"+^<blockquote>
+  <p>ES6学习笔记</p>
+</blockquote>
+
+<h3 id="let">let</h3>
+<p>let不能被重复声明
+不存在变量提升（必须先声明才能输出）
+let声明的变量只在当前（块级）作用域内有效</p>
+
+<h3 id="const">const</h3>
+
+<p>不存在提升
+一旦声明变量 就不能再改变（引用类型地址不变，值可以改变，需要冻结：<strong>Object.freeze(constName)</strong>）</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ES6之前是怎么声明常量的：
+var CST;
+Object.defineProperty(CST,'base_name',{
+value:'小明',
+writable:false //设置为只读属性
+})
+
+Object.seal(CST)	//防止对象被扩展
+</code></pre></div></div>
+
+<h3 id="数组">数组</h3>
+
+<h4 id="解构赋值">解构赋值</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const arr=['a','b','c','d',['d','e',['f','g']]];
+const [,,,,[,,[,g]]]=arr//为g取值，数组前有几位，就多几个
+</code></pre></div></div>
+
+<h4 id="扩展运算符">扩展运算符</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const arr[1,2,3,4,5]
+const [a,b,....c]=arr
+1和2赋值给了ab,剩下的全归c
+</code></pre></div></div>
+
+<p>带有控制运算符的变量必须放在最后</p>
+
+<h4 id="默认值">默认值</h4>
+<p>const arr=[1,undefined,undefined];
+const [a,b=2,c,d=’aaa’]=arr;
+这里a为数组里的1，而b设置了默认值为2，d设置了默认值为aaa，c没有默认值，取不到值所以为undefined</p>
+
+<h4 id="变量的交换">变量的交换</h4>
+<p>原始的方法为
+temp=a;
+a=b
+b=temp
+但现在可以这样
+[a,b]=[b,a]</p>
+
+<h4 id="接受多个函数返回值">接受多个函数返回值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">funtion</span> <span class="nx">getUserInfo</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+<span class="c1">//..ajax</span>
+<span class="k">return</span><span class="p">[</span>
+<span class="kc">true</span><span class="p">,</span>
+<span class="p">{</span>
+<span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">小明</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">gender</span><span class="p">:</span><span class="dl">'</span><span class="s1">女</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">id</span><span class="p">:</span><span class="nx">id</span><span class="p">},</span>
+<span class="dl">'</span><span class="s1">请求成功</span><span class="dl">'</span>
+<span class="p">];};</span>
+
+<span class="err">原始方式</span><span class="p">:</span><span class="kd">const</span> <span class="nx">resData</span><span class="o">=</span><span class="nx">getUserInfo</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">status</span><span class="o">=</span><span class="nx">resData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="err">一个一个的取</span>
+<span class="err">现在</span><span class="kd">const</span><span class="p">[</span><span class="nx">status</span><span class="p">,</span><span class="nx">data</span><span class="p">,</span><span class="nx">msg</span><span class="p">]</span><span class="o">=</span><span class="nx">getUserInfo</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="对象">对象</h3>
+
+<p>解构赋值</p>
+
+<p>const{a,b}={a:1,b;2}</p>
+
+<p>左边｛｝为需要赋值的变量，右边为需要解构的对象</p>
+
+<h4 id="对象稍微复杂的解构条件">对象：稍微复杂的解构条件</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">player</span><span class="o">=</span><span class="p">{</span>
+<span class="na">nickname</span><span class="p">:</span><span class="dl">'</span><span class="s1">感情的戏我没演技</span><span class="dl">'</span><span class="err">，</span>
+<span class="na">master</span><span class="p">:</span><span class="dl">'</span><span class="s1">东海龙王</span><span class="dl">'</span><span class="p">,</span>
+<span class="nx">skill</span><span class="err">：</span><span class="p">[{</span>
+<span class="na">skillName</span><span class="p">:</span><span class="dl">'</span><span class="s1">龙吟</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">mp</span><span class="p">:</span><span class="dl">'</span><span class="s1">100</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">time</span><span class="p">:</span><span class="mi">6000</span>
+<span class="p">},{</span>
+<span class="na">skillName</span><span class="p">:</span><span class="dl">'</span><span class="s1">龙卷雨击</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">mp</span><span class="p">:</span><span class="err">‘</span><span class="dl">'</span><span class="s1">400</span><span class="dl">'</span>
+<span class="na">time</span><span class="p">:</span><span class="mi">3000</span>
+<span class="p">}</span><span class="err">，</span><span class="p">{</span>
+<span class="na">skillName</span><span class="p">:</span><span class="dl">'</span><span class="s1">龙腾</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">mp</span><span class="p">:</span><span class="err">‘</span><span class="mi">900</span><span class="err">’，</span>
+<span class="na">time</span><span class="p">:</span><span class="mi">60000</span>
+<span class="p">}]</span>
+<span class="p">};</span>
+<span class="kd">const</span><span class="p">{</span><span class="nx">nickname</span><span class="p">}</span><span class="o">=</span><span class="nx">player</span><span class="p">;</span><span class="c1">//取感情的戏我没演技</span>
+<span class="kd">const</span><span class="p">{</span><span class="nx">master</span><span class="p">}</span> <span class="o">=</span><span class="nx">player</span><span class="p">;</span><span class="c1">//取东海龙王</span>
+<span class="kd">const</span><span class="p">{</span><span class="na">skill</span><span class="p">:[</span><span class="nx">skill1</span><span class="p">]}</span><span class="o">=</span><span class="nx">player</span><span class="p">;</span><span class="c1">//取第一个数组</span>
+<span class="kd">const</span><span class="p">{</span><span class="na">skill</span><span class="p">:[</span><span class="nx">skill1</span><span class="p">,{</span><span class="nx">skillName</span><span class="p">}]}</span><span class="o">=</span><span class="nx">player</span><span class="p">;</span><span class="c1">//取第二个数组的龙卷雨击</span>
+<span class="kd">const</span><span class="p">{</span><span class="na">skill</span><span class="p">:[</span><span class="nx">skill1</span><span class="p">,{</span><span class="nx">skillName</span><span class="p">},{</span><span class="na">skillName</span><span class="p">:</span> <span class="nx">sklName</span><span class="err">｝</span><span class="p">]}</span><span class="o">=</span><span class="nx">player</span><span class="c1">//取第三个龙腾，并为了防止名字重复重新起一个新名字</span>
+</code></pre></div></div>
+
+<h4 id="结合扩展运算符">结合扩展运算符</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">obj</span><span class="o">=</span><span class="p">{</span>
+<span class="na">saber</span><span class="p">:</span><span class="dl">'</span><span class="s1">阿尔托利亚</span><span class="dl">'</span><span class="err">，</span>
+<span class="nx">archer</span><span class="err">：</span><span class="dl">'</span><span class="s1">卫宫</span><span class="dl">'</span><span class="err">，</span>
+<span class="na">lancer</span><span class="p">:</span><span class="dl">'</span><span class="s1">瑟坦达</span><span class="dl">'</span>
+<span class="p">}</span><span class="err">；</span>
+<span class="kd">const</span><span class="p">{</span><span class="nx">saber</span><span class="p">,...</span><span class="nx">oth</span><span class="p">}</span><span class="o">=</span><span class="nx">obj</span>
+</code></pre></div></div>
+
+<h5 id="把obj1的所有属性放到obj里">把obj1的所有属性放到obj里</h5>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">obj1</span><span class="o">=</span><span class="p">{</span>
+<span class="na">archer</span><span class="p">:</span><span class="dl">'</span><span class="s1">卫宫</span><span class="dl">'</span><span class="p">,</span>
+<span class="nx">lancer</span><span class="err">：‘瑟坦达’</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="nx">obj</span><span class="o">=</span><span class="p">{</span>
+<span class="na">saber</span><span class="p">:</span><span class="dl">'</span><span class="s1">阿尔托利亚</span><span class="dl">'</span><span class="p">,</span>
+<span class="p">...</span><span class="nx">obj1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="对已经申明了的变量进行对象的解构赋值">对已经申明了的变量进行对象的解构赋值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">age</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">obj</span><span class="o">=</span><span class="p">{</span>
+<span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">小明</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">age</span><span class="p">:</span><span class="mi">22</span>
+<span class="p">};</span>
+<span class="p">{</span><span class="nx">age</span><span class="p">}</span><span class="o">=</span><span class="nx">obj</span> <span class="p">;</span><span class="c1">//此时将age误认为块级作用域，无法赋值得加上（）</span>
+<span class="p">({</span><span class="nx">age</span><span class="p">}</span><span class="o">=</span><span class="nx">obj</span><span class="p">)</span><span class="c1">//即可但不推荐，平时最好还是带上变量声明let {age} = obj</span>
+</code></pre></div></div>
+
+<h4 id="默认值-1">默认值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">girlfriend</span><span class="o">=</span><span class="p">{</span>
+<span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">小红</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">age</span><span class="p">:</span><span class="kc">undefined</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="p">{</span><span class="nx">name</span><span class="p">,</span><span class="nx">age</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span><span class="nx">hobby</span><span class="o">=</span><span class="p">[</span><span class="dl">'</span><span class="s1">学习</span><span class="dl">'</span><span class="p">]}</span><span class="o">=</span><span class="nx">girlfriend</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="p">{</span><span class="na">foo</span><span class="p">:</span><span class="nx">baz</span><span class="p">}</span> <span class="o">=</span> <span class="p">{</span><span class="na">foo</span><span class="p">:</span><span class="dl">"</span><span class="s2">aaa</span><span class="dl">"</span><span class="p">,</span><span class="na">bar</span><span class="p">:</span><span class="dl">"</span><span class="s2">bbb</span><span class="dl">"</span><span class="p">};</span><span class="c1">//将foo的值赋予baz</span>
+<span class="nx">baz</span> <span class="c1">//aaa</span>
+</code></pre></div></div>
+
+<h4 id="获取多个函数返回值">获取多个函数返回值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">getUserInfo</span><span class="p">(</span><span class="nx">uid</span><span class="p">){</span>
+<span class="c1">//ajax</span>
+<span class="k">return</span><span class="p">{</span>
+<span class="na">status</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+<span class="na">data</span><span class="p">:{</span>
+<span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">小红</span><span class="dl">'</span><span class="p">,</span>
+<span class="p">},</span>
+<span class="na">msg</span><span class="p">:</span><span class="dl">'</span><span class="s1">请求成功</span><span class="dl">'</span>
+<span class="p">};</span>
+<span class="p">};</span>
+<span class="kd">const</span><span class="p">{</span><span class="nx">status</span><span class="p">,</span><span class="nx">data</span><span class="p">,</span><span class="nx">msg</span><span class="p">}</span><span class="o">=</span><span class="nx">getUserInfo</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>例2</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">node</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">type</span><span class="p">:</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ES</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">loc</span><span class="p">:{</span>
+        <span class="na">start</span><span class="p">:[</span><span class="dl">"</span><span class="s2">line</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">column</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">end</span><span class="p">:{</span>
+        <span class="na">line</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="na">column</span><span class="p">:</span><span class="mi">4</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">const</span><span class="p">{</span><span class="nx">type</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="na">loc</span><span class="p">:{</span><span class="na">start</span><span class="p">:[</span><span class="nx">line</span><span class="p">,</span><span class="nx">ccc</span><span class="p">,</span><span class="nx">foo</span><span class="o">=</span><span class="mi">2</span><span class="p">],</span><span class="na">end</span><span class="p">:{</span><span class="na">line</span><span class="p">:</span><span class="nx">key</span><span class="p">}}}</span><span class="o">=</span><span class="nx">node</span>
+</code></pre></div></div>
+
+<h4 id="字符串的解构赋值">字符串的解构赋值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">I am the bone of my sword</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 我是剑骨头</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">c</span><span class="p">,...</span><span class="nx">oth</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">str</span><span class="p">;</span><span class="c1">//根据前后顺序获取字符</span>
+<span class="kd">const</span> <span class="p">[</span> <span class="p">...</span><span class="nx">spStr1</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">str</span><span class="p">;</span><span class="c1">//获取全部字符,返回一个数组</span>
+<span class="kd">const</span> <span class="nx">spStr2</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">);</span><span class="c1">//以空格分割字，获取由空格隔开的所有字符，返回一个数组</span>
+<span class="kd">const</span> <span class="nx">spStr3</span> <span class="o">=</span> <span class="p">[</span> <span class="p">...</span><span class="nx">str</span> <span class="p">];</span><span class="c1">//结果如上</span>
+<span class="c1">// ------------------------------------------</span>
+<span class="c1">// 提取属性</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">split</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">str</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h4 id="函数参数解构赋值">函数参数解构赋值</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 函数参数的解构赋值</span>
+<span class="kd">function</span> <span class="nx">swap</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">])</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="p">[</span><span class="nx">y</span><span class="p">,</span> <span class="nx">x</span><span class="p">];</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span>
+<span class="nx">arr</span> <span class="o">=</span> <span class="nx">swap</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span>
+<span class="c1">// -----------------</span>
+<span class="kd">function</span> <span class="nx">Computer</span><span class="p">({</span>
+	<span class="nx">cpu</span><span class="p">,</span>
+	<span class="nx">memory</span>
+	<span class="nx">software</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ie6</span><span class="dl">'</span><span class="p">],</span><span class="c1">//默认值</span>
+	<span class="nx">OS</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">windows 3.5</span><span class="dl">'</span>
+<span class="p">})</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cpu</span><span class="p">);</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">memory</span><span class="p">);</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">software</span><span class="p">);</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">OS</span><span class="p">);</span>
+
+<span class="p">};</span>
+<span class="k">new</span> <span class="nx">Computer</span><span class="p">({</span>
+	<span class="na">memory</span><span class="p">:</span> <span class="dl">'</span><span class="s1">128G</span><span class="dl">'</span><span class="p">,</span>
+	<span class="na">cpu</span><span class="p">:</span> <span class="dl">'</span><span class="s1">80286</span><span class="dl">'</span><span class="p">,</span>
+	<span class="na">OS</span><span class="p">:</span> <span class="dl">'</span><span class="s1">windows 10</span><span class="dl">'</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>#### 字符串中添加值</p>
+
+<p>const name =’woniu’</p>
+
+<p>console.log(‘</p>
+
+<p>hello ${name}!!!</p>
+
+<p>hello world</p>
+
+<p>’)</p>
+
+<h4 id="箭头函数">箭头函数</h4>
+
+<p>const double=(num)=&gt;num*2</p>
+
+<p>const add (num1,num2)=&gt;{</p>
+
+<p>return num1+num2</p>
+
+<p>}</p>
+
+<p>console.log(add(3,4))</p>
+
+<p>const add1=(num1,num2=1)=&gt;{return num1+num2}给num2设定默认值</p>
+
+<p>console.log(add(3))</p>
+
+<h4 id="展开符">展开符</h4>
+
+<p>let arr=[5,6]</p>
+
+<p>console.log(add(…arrr)) //输出11</p>
+
+<p>console.log ([123,….arrr])对数组进行合并</p>
+
+<h4 id="对象扩展">对象扩展</h4>
+
+<p>对象的一个简写形式</p>
+
+<p>const key =’job’</p>
+
+<p>const obj={</p>
+
+<p>num=1,</p>
+
+<p>str:’woniu’,</p>
+
+<p>work(){},  //原先的形式为work:function(){}</p>
+
+<p>}</p>
+
+<p>console.log(obj)</p>
+
+<h4 id="解构赋值-1">解构赋值</h4>
+
+<p>交换赋值</p>
+
+<p>let arr =[1,2]</p>
+
+<p>let[num1,num2]=arr</p>
+
+<p>const obj=｛type:’IT’,name’world’｝</p>
+
+<p>const{type,name}=obj</p>
+
+<h4 id="模块化">模块化</h4>
+
+<p>新建JS文件 module1</p>
+
+<p>export const name =’woniu123’</p>
+
+<p>export function sayHello(){console.log(‘hello world’)}</p>
+
+<p>export default funciton(){console.log(‘vuejs 还不错’)} //使用默认值</p>
+
+<p>主文件引用</p>
+
+<p>import {name}from ‘./module1’ //输出woniu123</p>
+
+<p>import sayHi from ‘,/module1’ //使用默认值可以随意命名且不用加大括号</p>
+
+<h3 id="es6常用代码片段">ES6常用代码片段</h3>
+
+<p>let arr=[1,2,3,4]</p>
+
+<h5 id="遍历">遍历</h5>
+
+<p>arrr.forEach(v=&gt;){</p>
+
+<p>console.log(v)    //全部打印一遍</p>
+
+<p>}</p>
+
+<p>console.log(arr.map(v=&gt;v*2) ) //打印出将数组内所有数的二倍值</p>
+
+<p>console.log(arr.every(v=&gt;v&gt;0) )判断数组内的所有值是否都大于0   返回true说明全部大于0</p>
+
+<p>console.log(arr.every(v=&gt;v&gt;2) )判断数组内所有值是否都大于2，返回false</p>
+
+<p>console.log(arr.filter(v=&gt;v&gt;3)）输出保留数组内大于3的数据</p>
+
+<p>console.log(arr.filter(v=&gt;v&lt;=3).map(v=&gt;v*3)） //可以链式调用，在一个方法后再加一个方法</p>
+
+<h5 id="数组去重">数组去重</h5>
+
+<p>let arr1=[1,2,3,4,2,3]</p>
+
+<p>let arr2=[4,3,6,8]</p>
+
+<p>console.log(new Set(arr1))//去除arr1数组内重复的值 输出Set{1,2,3,4}</p>
+
+<p>console.log([…new Set(arr1)]) //去除arr1数组内重复的值且输出为数组 输出[1,2,3,4]</p>
+
+<p>//并集</p>
+
+<p>console.log([…new Set([…arr1,…arr2])]) //2个数组去重后合并的结果</p>
+
+<p>//页面使用了多少种标签</p>
+
+<p>document.querySelectorAll(‘*‘)查询到所有标签</p>
+
+<p>[…document.querySelectorAll(‘*’)].map(v=&gt;v.nodeName) //将其变为数组</p>
+
+<p>Set([…document.querySelectorAll(‘*’)].map(v=&gt;v.nodeName))//将其变为数组</p>
+
+<p>new Set([…document.querySelectorAll(‘*’)].map(v=&gt;v.nodeName)).size获取使用的标签</p>
+
+<p>//对象扩展</p>
+
+<p>//遍历</p>
+
+<p>const obj1={</p>
+
+<p>name:woniu,</p>
+
+<p>age:18</p>
+
+<p>}</p>
+
+<p>const obj2={</p>
+
+<p>funllName:’woniu1’,</p>
+
+<p>sex:’male’</p>
+
+<p>}</p>
+
+<p>Object.keys(obj1).forEach(v=&gt;{console.log(v,obj1[v])//遍历对象</p>
+
+<p>})</p>
+
+<p>console.log({…obj1,job:fe,age:16}) //进行了取值，合并，修改的操作输出name:’woniu’,age:’16’,job:’fe’</p>
+
+<p>console.log({…obj1,…obj2,job:’fe’,age:16}) 对象的合并操作</p>
+
+:ET
